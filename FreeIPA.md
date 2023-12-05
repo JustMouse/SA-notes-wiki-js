@@ -1,8 +1,8 @@
 ---
-title: FreeIPA
+title: О домене IPA
 description: Описание и работа с FreeIPA
 published: true
-date: 2023-12-05T23:36:49.770Z
+date: 2023-12-05T23:37:31.095Z
 tags: ipa
 editor: markdown
 dateCreated: 2023-12-05T07:03:14.772Z
