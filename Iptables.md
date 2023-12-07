@@ -2,7 +2,7 @@
 title: Iptables
 description: Iptables описание и работа с ним
 published: true
-date: 2023-12-07T08:12:24.229Z
+date: 2023-12-07T08:14:12.314Z
 tags: nat, межсетевой экран
 editor: markdown
 dateCreated: 2023-12-07T08:09:23.665Z
@@ -13,7 +13,6 @@ dateCreated: 2023-12-07T08:09:23.665Z
 Это межсетевой экран
 
 ## Настройка iptables на RedOS
-
 Для включение автозагрузки правил необходимо установить пакет iptables-serives:
 ```bash
 dnf install iptables-services
@@ -29,4 +28,13 @@ iptables -F
 Далее, включаем iptables в автозагрузку и дополнительно включаем --now
 ```bash
 systemctl enable --now iptables
+```
+## Настройка PAT (MASQUERADE)
+Чтобы установить правило MASQUERADE, Перегруженный NAT, или просто PAT, необходимо добавить соответствующие правило:
+```bash
+iptables -t nat -A POSTROUTING -o ens* -j MASQUERADE
+```
+Посмотреть данное правило в таблице nat можно следующей командой
+```bash
+iptables -t nat -S
 ```
