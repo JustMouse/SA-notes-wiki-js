@@ -2,7 +2,7 @@
 title: Iptables
 description: Iptables описание и работа с ним
 published: true
-date: 2023-12-07T08:52:19.508Z
+date: 2023-12-07T08:52:38.736Z
 tags: nat, межсетевой экран
 editor: markdown
 dateCreated: 2023-12-07T08:09:23.665Z
@@ -24,7 +24,7 @@ dateCreated: 2023-12-07T08:09:23.665Z
 Далее добавляются ключи `-S`,`-A` и т.д. для работы с iptables.
 Рассмотрим как добавить правило PAT, наиболее популярное и востребованное в маршрутизатрах:
 ```bash
-iptables -t nat -A POSTROUTING -o ens* -j MASQUERADE
+iptables -t nat -A POSTROUTING -o <Интерфейс> -j MASQUERADE
 ```
 , где ключи
 `-t` или `--table` - (Таблица) указание с какой таблицей работать
