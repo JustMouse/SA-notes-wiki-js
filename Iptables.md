@@ -2,7 +2,7 @@
 title: Iptables
 description: Iptables описание и работа с ним
 published: true
-date: 2023-12-07T08:14:12.314Z
+date: 2023-12-07T08:15:04.692Z
 tags: nat, межсетевой экран
 editor: markdown
 dateCreated: 2023-12-07T08:09:23.665Z
@@ -21,7 +21,7 @@ dnf install iptables-services
 ```bash
 iptables -S
 ```
-Чтобы удалить их использую Flush:
+Чтобы удалить все правила в траблице filter, используем Flush:
 ```bash
 iptables -F
 ```
