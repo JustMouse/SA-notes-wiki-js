@@ -2,7 +2,7 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-11T22:32:04.500Z
+date: 2023-12-11T22:35:49.522Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-12-05T23:48:18.509Z
@@ -93,15 +93,17 @@ dateCreated: 2023-12-05T23:48:18.509Z
   </table>
 </figure>
 <h2>Модуль 1. Базовая настройка</h2>
-<p>1. Выполните базовую настройку всех устройств:<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; a. Присвоить имена в соответсвии с топологией. На <strong>ВСЕХ</strong> машинах. Пункт проверяется на всех устройствах</p>
-<pre><code class="language-plaintext">ef$ef
-redos$ hostnamectl set-hostname [Имя] # Например: hostnamectl set-hostname ISP
-redos$ hostnamectl set-hostname [Имя.домен] # Используйте в локальных сетях организации, таким образом:
+<p>1. Выполните базовую настройку всех устройств:<br>&nbsp; &nbsp;a. Присвоить имена в соответствии с топологией.</p>
+<blockquote>
+  <p>Присвоить имена в соответсвии с топологией. На <strong>ВСЕХ</strong> машинах. Пункт проверяется на всех устройствах</p>
+</blockquote>
+<pre><code class="language-plaintext">hostnamectl set-hostname [Имя] # Например: hostnamectl set-hostname ISP
+hostnamectl set-hostname [Имя.домен...] # Используйте в локальных сетях организации, таким образом, чтобы автоматически заполнить параметр   
 # hq-srv: hq-srv.hq.work
 # BR-R: br-r.branch.work
 # И т.д.
 </code></pre>
-<p>b. Рассчитайте IP-адресацию IPv4 и IPv6. <i>см. Таблицу IP-адресов.</i></p>
+<p>b. Рассчитайте IP-адресацию IPv4 и IPv6. <i>см. Таблицу IP-адресов</i></p>
 <p>c. Пул адресов для BRANCH - не более 16 адресов. <strong>Это маска 28</strong></p>
 <p>d. Пул адресов для HQ - не более 64 адресов. <strong>Это маска 26</strong></p>
 <p><strong>Продолжение следующих пунктов</strong> требует <i>базовой связанности</i> не указанной в задании. Убедитесь, что все машины выход в Интернет и на устройствах <strong>ISP, HQ-R, BR-R</strong> настроен <strong>NAT (PAT)</strong>.</p>
