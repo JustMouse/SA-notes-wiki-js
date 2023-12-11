@@ -2,7 +2,7 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-11T23:06:57.041Z
+date: 2023-12-11T23:12:51.646Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-12-05T23:48:18.509Z
@@ -28,7 +28,7 @@ dateCreated: 2023-12-05T23:48:18.509Z
 </ol>
 <h2>Топология</h2>
 <figure class="image"><img src="/demo24-topology.png" alt=""></figure>
-<h2>Предлагаемая таблица IP-адресов</h2>
+<h2>Таблица IP-адресов</h2>
 <figure class="table">
   <table>
     <thead>
@@ -133,13 +133,14 @@ hostnamectl set-hostname [Имя.домен...] # Используйте в ло
 # BR-R: br-r.branch.work
 # CLI: cli
 # ISP: isp</code></pre>
-<p>&nbsp; &nbsp;b. Рассчитайте IP-адресацию IPv4 и IPv6. <i>см. </i><a href="#предлагаемая-таблица-ip-адресов"><i>Таблицу IP-адресов</i></a></p>
+<p>&nbsp; &nbsp;b. Рассчитайте IP-адресацию IPv4 и IPv6. <i>см. </i><a href="#таблица-ip-адресов"><i>Таблицу IP-адресов</i></a></p>
 <p>&nbsp; &nbsp;c. Пул адресов для BRANCH - не более 16 адресов. <strong>Это маска 28</strong></p>
 <p>&nbsp; &nbsp;d. Пул адресов для HQ - не более 64 адресов. <strong>Это маска 26</strong></p>
 <blockquote>
   <p>Количество хостов для сети с маской подсети IPv4: /26 = 62, /28 = 30. IPv6: /123 = 62 /123 = 30</p>
 </blockquote>
 <p><strong>Продолжение следующих пунктов</strong> требует <i>базовой связанности</i> не указанной в задании. Убедитесь, что все машины выход в Интернет и на устройствах <strong>ISP, HQ-R, BR-R</strong> настроен <strong>NAT (PAT)</strong>.</p>
+<p>&nbsp;</p>
 <pre><code class="language-plaintext"># Настройка iptables на маршрутизаторах
 redos$ dnf install iptables-services
 redos$ iptables -t nat -A POSTROUTING -o ens* -j MASQUERADE # Вместо '*', используется интерфейс в сторону ближе к Интернету
