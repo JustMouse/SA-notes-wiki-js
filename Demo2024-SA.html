@@ -2,7 +2,7 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-11T22:27:25.038Z
+date: 2023-12-11T22:28:15.118Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-12-05T23:48:18.509Z
@@ -30,19 +30,72 @@ dateCreated: 2023-12-05T23:48:18.509Z
 <h2 class="toc-header" id="топология"> Топология</h2>
 <p><img alt="" src="/demo24-topology.png"></p>
 <h2 class="toc-header" id="предлагаемая-таблица-ip-адресов"> Предлагаемая таблица IP-адресов</h2>
-<p>| </p><div style="width:100px">Устройства</div><div> | </div><div style="width:200px">IP-адрес</div><div> | Сеть | </div><br><div>
-| --- | --- | --- |</div><br><div>
-| ISP | X.X.X.X (DHCP) | Internet |</div><br><div>
-|     | 172.16.10.1/30 | ISP-HQ |</div><br><div>
-|     | 172.16.20.1/30 | ISP-BR |</div><br><div>
-|     | 192.168.111.1/24 | ISP-CLI |</div><br><div>
-| HQ-R | 172.16.10.2/30 | ISP-HQ |</div><br><div>
-|     | 192.168.10.1/26 | HQ-NET |</div><br><div>
-| BR-R | 172.16.20.2/30 | ISP-BR |</div><br><div>
-|     | 192.168.20.1/28 | BR-NET |</div><br><div>
-| hq-srv | 192.168.10.5/26 | HQ-NET |</div><br><div>
-| BR-SRV | 192.168.20.5/28 | BR-NET |</div><br><div>
-| CLI | 192.168.111.2/24 | ISP-CLI |</div><p></p>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th>Устройство</th>
+<th>IP-адрес</th>
+<th>Сеть</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ISP</td>
+<td>192.168.106.X (DHCP)</td>
+<td>Internet</td>
+</tr>
+<tr>
+<td></td>
+<td>172.16.10.1/30</td>
+<td>ISP-HQ</td>
+</tr>
+<tr>
+<td></td>
+<td>172.16.20.1/30</td>
+<td>ISP-BR</td>
+</tr>
+<tr>
+<td></td>
+<td>192.168.111.1/24</td>
+<td>ISP-CLI</td>
+</tr>
+<tr>
+<td>HQ-R</td>
+<td>172.16.10.2/30</td>
+<td>ISP-HQ</td>
+</tr>
+<tr>
+<td></td>
+<td>192.168.10.1/26</td>
+<td>HQ-NET</td>
+</tr>
+<tr>
+<td>BR-R</td>
+<td>172.16.20.2/30</td>
+<td>ISP-BR</td>
+</tr>
+<tr>
+<td></td>
+<td>192.168.20.1/28</td>
+<td>BR-NET</td>
+</tr>
+<tr>
+<td>hq-srv</td>
+<td>192.168.10.5/26</td>
+<td>HQ-NET</td>
+</tr>
+<tr>
+<td>BR-SRV</td>
+<td>192.168.20.5/28</td>
+<td>BR-NET</td>
+</tr>
+<tr>
+<td>CLI</td>
+<td>192.168.111.2/24</td>
+<td>ISP-CLI</td>
+</tr>
+</tbody>
+</table></div>
 <h2 class="toc-header" id="модуль-1-базовая-настройка"> Модуль 1. Базовая настройка</h2>
 <p>Выполните базовую настройку всех устройств:<br>
 a. Присвоить имена в соответсвии с топологией. На <strong>ВСЕХ</strong> машинах. Пункт проверяется на всех устройствах</p>
