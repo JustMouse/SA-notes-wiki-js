@@ -2,33 +2,33 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-11T22:36:29.857Z
+date: 2023-12-11T22:38:29.563Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-12-05T23:48:18.509Z
 -->
 
-<h1 class="toc-header" id="решение-демонстрационного-экзамена-2024"> Решение Демонстрационного Экзамена 2024</h1>
+<h1>Решение Демонстрационного Экзамена 2024</h1>
 <p>Сетевое и Системное Администрирование (Профиль)<br><i>Версия от 12.12.2023</i></p>
-<h2 class="toc-header" id="ссылки"> Ссылки</h2>
-<p><a class="is-external-link" href="https://bom.firpo.ru/Public/83">Официальная документация 2023</a></p>
-<h3 class="toc-header" id="загрузка-решения-в-виде-документа"> Загрузка решения в виде документа</h3>
+<h2>Ссылки</h2>
+<p><a href="https://bom.firpo.ru/Public/83">Официальная документация 2023</a></p>
+<h3>Загрузка решения в виде документа</h3>
 <ul>
-  <li><a class="is-external-link" href="http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.pdf">PDF</a></li>
-  <li><a class="is-external-link" href="http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.word">Word</a></li>
-  <li><a class="is-external-link" href="http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.html">HTML</a></li>
-  <li><a class="is-external-link" href="http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.md">MD</a></li>
+  <li><a href="http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.pdf">PDF</a></li>
+  <li><a href="http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.word">Word</a></li>
+  <li><a href="http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.html">HTML</a></li>
+  <li><a href="http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.md">MD</a></li>
 </ul>
-<h2 class="toc-header" id="предисловие"> Предисловие</h2>
+<h2>Предисловие</h2>
 <ol>
   <li>Модули настоящего задания очень сильно связаны друг с другом. Например, это касается VPN (Модуль 3. Пункт 7) и Контроллера домена (Модуль 2. Пункт 3). Несмотря на то, что они находятся в разных модулях логичнее сначала настроить всю сетевую связанность, в том числе и VPN, а уже после Контроллер домена.</li>
   <li>По идеи задания временное подключение используется для быстрого ввода устройства CLI в домен. Тем не менее в данном решении данное подключение не осуществляется, так как было принято решение предоставить устройству CLI функциональный VPN до HQ-R, что обосновано необходимостью для студентов навыками в умениями в данной дисциплине.</li>
   <li>Настоящее задание предполагает, что в стенд не имеет доступа к Интернету, тем не менее в данном решение Интернет подключён к устройству ISP для скачивание пакетов с общедоступного репозитория.</li>
-  <li>Выбор операционной системы зависит от образовательной организации. В данном решении предполагается использования только <a class="is-external-link" href="https://files.red-soft.ru/redos/7.3/x86_64/iso/redos-MUROM-7.3.3-20230815.0-Everything-x86_64-DVD1.iso"><strong>RedOS 7.3.3 Minimal installation</strong></a> и <a class="is-external-link" href="https://files.red-soft.ru/redos/7.3/x86_64/iso/redos-MUROM-7.3.3-20230815.0-Everything-x86_64-DVD1.iso"><strong>RedOS 7.3.3 Workstation (MATE)</strong></a></li>
+  <li>Выбор операционной системы зависит от образовательной организации. В данном решении предполагается использования только <a href="https://files.red-soft.ru/redos/7.3/x86_64/iso/redos-MUROM-7.3.3-20230815.0-Everything-x86_64-DVD1.iso"><strong>RedOS 7.3.3 Minimal installation</strong></a> и <a href="https://files.red-soft.ru/redos/7.3/x86_64/iso/redos-MUROM-7.3.3-20230815.0-Everything-x86_64-DVD1.iso"><strong>RedOS 7.3.3 Workstation (MATE)</strong></a></li>
 </ol>
-<h2 class="toc-header" id="топология"> Топология</h2>
-<figure class="image"><img alt="" src="/demo24-topology.png"></figure>
-<h2 class="toc-header" id="предлагаемая-таблица-ip-адресов"> Предлагаемая таблица IP-адресов</h2>
+<h2>Топология</h2>
+<figure class="image"><img src="/demo24-topology.png" alt=""></figure>
+<h2>Предлагаемая таблица IP-адресов</h2>
 <figure class="table">
   <table>
     <thead>
@@ -40,7 +40,7 @@ dateCreated: 2023-12-05T23:48:18.509Z
     </thead>
     <tbody>
       <tr>
-        <td rowspan="4" style="text-align:center;width:100px;">ISP</td>
+        <td style="text-align:center;width:100px;" rowspan="4">ISP</td>
         <td style="width:300px;">192.168.106.X (DHCP)</td>
         <td style="text-align:center;width:100px;">Internet</td>
       </tr>
@@ -57,7 +57,7 @@ dateCreated: 2023-12-05T23:48:18.509Z
         <td style="text-align:center;width:100px;">ISP-CLI</td>
       </tr>
       <tr>
-        <td rowspan="2" style="text-align:center;width:100px;">HQ-R</td>
+        <td style="text-align:center;width:100px;" rowspan="2">HQ-R</td>
         <td style="width:300px;">172.16.10.2/30</td>
         <td style="text-align:center;width:100px;">ISP-HQ</td>
       </tr>
@@ -66,7 +66,7 @@ dateCreated: 2023-12-05T23:48:18.509Z
         <td style="text-align:center;width:100px;">HQ-NET</td>
       </tr>
       <tr>
-        <td rowspan="2" style="text-align:center;width:100px;">BR-R</td>
+        <td style="text-align:center;width:100px;" rowspan="2">BR-R</td>
         <td style="width:300px;">172.16.20.2/30</td>
         <td style="text-align:center;width:100px;">ISP-BR</td>
       </tr>
@@ -92,22 +92,25 @@ dateCreated: 2023-12-05T23:48:18.509Z
     </tbody>
   </table>
 </figure>
-<h2 class="toc-header" id="модуль-1-базовая-настройка"> Модуль 1. Базовая настройка</h2>
+<h2>Модуль 1. Базовая настройка</h2>
 <p>1. Выполните базовую настройку всех устройств:<br>&nbsp; &nbsp;a. Присвоить имена в соответствии с топологией.</p>
 <blockquote>
   <p>Присвоить имена в соответсвии с топологией. На <strong>ВСЕХ</strong> машинах. Пункт проверяется на всех устройствах</p>
 </blockquote>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">hostnamectl set-hostname [Имя] # Например: hostnamectl set-hostname ISP
-hostnamectl set-hostname [Имя.домен...] # Используйте в локальных сетях организации, таким образом, чтобы автоматически заполнить параметр   
-# hq-srv: hq-srv.hq.work
+<pre><code class="language-plaintext">hostnamectl set-hostname [Имя] # Например: hostnamectl set-hostname ISP
+hostnamectl set-hostname [Имя.домен...] # Используйте в локальных сетях организации, таким образом, чтобы автоматически заполнить параметр 'search' поисковый домен   
+# Примеры:
+# HQ-SRV: hq-srv.hq.work
+# HQ-R: hq-r.hq.work
+# BR-SRV: br-srv.branch.work
 # BR-R: br-r.branch.work
-# И т.д.
-</code></pre>
+# CLI: cli
+# ISP: isp</code></pre>
 <p>b. Рассчитайте IP-адресацию IPv4 и IPv6. <i>см. Таблицу IP-адресов</i></p>
 <p>c. Пул адресов для BRANCH - не более 16 адресов. <strong>Это маска 28</strong></p>
 <p>d. Пул адресов для HQ - не более 64 адресов. <strong>Это маска 26</strong></p>
 <p><strong>Продолжение следующих пунктов</strong> требует <i>базовой связанности</i> не указанной в задании. Убедитесь, что все машины выход в Интернет и на устройствах <strong>ISP, HQ-R, BR-R</strong> настроен <strong>NAT (PAT)</strong>.</p>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext"># Настройка iptables на маршрутизаторах
+<pre><code class="language-plaintext"># Настройка iptables на маршрутизаторах
 redos$ dnf install iptables-services
 redos$ iptables -t nat -A POSTROUTING -o ens* -j MASQUERADE # Вместо '*', используется интерфейс в сторону ближе к Интернету
 redos$ systemctl enable iptables # Включаем автозагрузку
@@ -119,14 +122,14 @@ redos$ iptables -t nat -F # Удалить все правила таблицы 
 redos$ iptables -t nat -S # Посмотреть все правила таблицы nat
 redos$ iptables -S # Посмотреть все правила таблицы FILTER
 </code></pre>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext"># Настройка включение маршрутизации на маршрутизаторах
+<pre><code class="language-plaintext"># Настройка включение маршрутизации на маршрутизаторах
 redos$ nano /etc/sysctl.conf
 --- # Дописать строку
 net.ipv4.ip_forward=1
 ---
 redos$ sysctl -p # После ввода команды должна появиться только что написанная команда. Если это не так, то проверьте на опечатки. Сделать данную настройку нужно на ISP, HQ-R, BR-R
 </code></pre>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext"># Настройка сетевых интерфейсов
+<pre><code class="language-plaintext"># Настройка сетевых интерфейсов
 redos$ nmtui # Открывает псевдографика с настройками
 redos$ Изменить подключение &gt; [Интерфейс] Изменить &gt; [Поменяйте Имя профиля, Конфигурацию IPv4: Выберите между Автоматически и Вручную (DHCP и Static), Укажите IP-адрес с маской, Укажите шлюз, если он не настраивается по DHCP, Установите Серверы DNS 2 шткуи, если они не настраиваются по DHCP: Они должны быть 192.168.10.5(hq-srv), 8.8.8.8(Google DNS) Именно в таком порядке]
 # Включите и выключите интерфейсы, если они не обновляются автоматически после изменений. Или перезагрузите машину
@@ -134,8 +137,8 @@ redos$ Изменить подключение &gt; [Интерфейс] Изм�
 <ol>
   <li>Настройте внутреннюю динамическую маршрутизацию по средствам <strong>FRR</strong>. Это будет <strong>OSPF</strong> между туннелями HQ-R и BR-R. Сначала должен быть настроен <strong>туннель</strong>.</li>
 </ol>
-<h3 class="toc-header" id="vpn"> VPN</h3>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">HQ-R$ dnf install wireguard-tools frr # Wireguard - VPN, FRR - OSPF
+<h3>VPN</h3>
+<pre><code class="language-plaintext">HQ-R$ dnf install wireguard-tools frr # Wireguard - VPN, FRR - OSPF
 HQ-R$ cd /etc/wireguard
 HQ-R$ wg genkey | tee HQ-R.key | wg pubkey &gt; HQ-R.pub # .key - приватный ключ; .pub - публичный ключ
 HQ-R$ wg genkey | tee BR-R.key | wg pubkey &gt; BR-R.pub # На HQ-R должен быть приватный HQ-R и публичный BR-R, а на BR-R наоборот
@@ -186,8 +189,8 @@ HQ-R$ ping 192.168.20.1
 BR-R$ ping 10.0.0.1
 BR-R$ ping 192.168.10.1
 </code></pre>
-<h3 class="toc-header" id="ospf-frr"> OSPF (FRR)</h3>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">#===HQ-R===#
+<h3>OSPF (FRR)</h3>
+<pre><code class="language-plaintext">#===HQ-R===#
 HQ-R$ apt install frr
 HQ-R$ nano /etc/frr/daemons
 --- # В файле поменять следующую строку
@@ -245,11 +248,11 @@ BR-R$ $ show ip route # Должен быть маршрут с типом "O&gt
 --- # Проверка с WEB-L с учётом работающего туннеля
 hq-srv$ ping 192.168.20.5 # Хорошая проверка. Она проверяет сразу sysctl, iptables, frr. Если что-то не работает проверьте ping на более близкой дистанции. С HQ-R на BR-SRV или BR-R на BR-SRV
 </code></pre>
-<h3 class="toc-header" id="dhcp"> DHCP</h3>
+<h3>DHCP</h3>
 <ol>
   <li>Настройте автоматическое распределение IP-адресов на роутере HQ-R. Имеется ввиду <strong>DHCP</strong> на HQ-R в сторону HQ-NET, то есть для машины hq-srv.</li>
 </ol>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">HQ-R$ dnf install dhcp-server
+<pre><code class="language-plaintext">HQ-R$ dnf install dhcp-server
 HQ-R$ nano /etc/dhcp/dhcpd.conf # Если плохо c памятью или медленно пишете, то можно заменить dhcpd.conf файлом-примером
 Опционально: HQ-R$ cp /usr/share/doc/dhcp-server/dhcpd.conf.example /etc/dhcp/dhcpd.conf
 --- # Должны быть
@@ -308,7 +311,7 @@ redos$ systemctl status dhcpd # Посмотреть состоянии служ
     </tbody>
   </table>
 </figure>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">redos$ useradd -c Admin admin # Аргумент после '-c' Имя учётной записи в таблицы. Сам же Логин должен быть в нижнем регистре, а пробелы заменены '_'
+<pre><code class="language-plaintext">redos$ useradd -c Admin admin # Аргумент после '-c' Имя учётной записи в таблицы. Сам же Логин должен быть в нижнем регистре, а пробелы заменены '_'
 redos$ useradd -c "Branch admin" branch_admin
 redos$ useradd -c "Network admin" network_admin
 redos$ passwd admin # Смените пароль на пользователе, чтобы в него можно было авторизоваться
@@ -316,20 +319,20 @@ redos$ passwd admin # Смените пароль на пользователе,
 <ol>
   <li>Измерьте пропускную способность сети между двумя узлами <strong>HQ-R</strong> и <strong>ISP</strong> по средствам утилиты <strong>iperf3</strong>. Предоставьте описание пропускной способности канала со скриншотами</li>
 </ol>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">redos$ dnf install iperf3 # Установка на двух устройствах
+<pre><code class="language-plaintext">redos$ dnf install iperf3 # Установка на двух устройствах
 ISP$ iperf3 -s # Включаем iperf3 в роли сервера
 HQ-R$ iperf3 -c 172.16.10.1 # Включаем iperf3 в роли клиента и соединяемся с сервером
 # Заскриньте 5 строк со скоростью сети с помощью прикладных программа на компьютере или с помощью OpenNebula
 </code></pre>
-<figure class="image"><img alt="" src="Demo24-screen1.png"></figure>
+<figure class="image"><img src="Demo24-screen1.png" alt=""></figure>
 <ol>
   <li>Составьте backup скрипты для сохранения конфигурации сетевых устройств, а именно <strong>HQ-R</strong> и <strong>BR-R</strong>. Продемонстрируйте их работу. <strong>Данный пункт можно</strong> выполнить только после выполнение пункта с <strong>VPN и FRR</strong> [2]</li>
 </ol>
-<h3 class="toc-header" id="ssh-2222"> SSH 2222</h3>
+<h3>SSH 2222</h3>
 <ol>
   <li>Настройте подключение по <strong>SSH</strong> для удалённого конфигурирования устройства <strong>hq-srv</strong> по порту <strong>2222</strong>. Учтите, что вам необходимо перенаправить трафик на этот порт по средствам контролирования трафика. Контроль трафика - это межсетевой экран, то есть <strong>iptables</strong>. Сделать настройку нужно на <strong>HQ-R</strong>, так как он виден в сети <strong>Internet</strong></li>
 </ol>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">HQ-R$ iptables -t nat -A PREROUTING -i ens3 -j DNAT -p tcp --dport 2222 --to-destination 192.168.10.5:22
+<pre><code class="language-plaintext">HQ-R$ iptables -t nat -A PREROUTING -i ens3 -j DNAT -p tcp --dport 2222 --to-destination 192.168.10.5:22
 HQ-R$ iptables-save &gt; /etc/sysconfig/iptables # Не забудьте сохранить правило
 hq-srv$ dnf install openssh-server
 hq-srv$ nano /etc/ssh/sshd_config
@@ -344,15 +347,15 @@ ISP$ ssh root@172.16.10.2 -p 2222 # Проверка с ISP. Вы должны �
 <ol>
   <li>Настройте контроль доступа до hq-srv по SSH со всех устройств, кроме CLI</li>
 </ol>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">HQ-R$ iptables -A FORWARD -i ens3 -s 192.168.111.0/24 -p tcp --dport 2222 -j DROP
+<pre><code class="language-plaintext">HQ-R$ iptables -A FORWARD -i ens3 -s 192.168.111.0/24 -p tcp --dport 2222 -j DROP
 HQ-R$ iptables-save &gt; /etc/sysconfig/iptables # Не забудьте сохранить правило
 </code></pre>
-<h2 class="toc-header" id="модуль-2-организация-сетевого-администрирования"> Модуль 2. Организация сетевого администрирования</h2>
-<h3 class="toc-header" id="bind-опционально"> BIND (ОПЦИОНАЛЬНО!!!)</h3>
+<h2>Модуль 2. Организация сетевого администрирования</h2>
+<h3>BIND (ОПЦИОНАЛЬНО!!!)</h3>
 <ol>
   <li>Настройте <strong>DNS-сервер</strong> на сервере <strong>hq-srv</strong>. Нужно создать две прямых зоны с A записями и две обратные зоны с PTR записям. Прямые <strong>"hq.work" и "branch.work"</strong>. Обратные <strong>"10.168.192.in-addr.arpa" и "20.168.192.in-addr.arpa"</strong></li>
 </ol>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">hq-srv$ dnf install bind
+<pre><code class="language-plaintext">hq-srv$ dnf install bind
 hq-srv$ nano /etc/named.conf
 --- # Следующие строки должны быть, некоторые нужно изменить, некоторые добавить
 listen-on port 53 { any; };
@@ -376,7 +379,7 @@ zone "20.168.192.in-addr.arpa" IN {
 }
 </code></pre>
 <p>Далее копируем базу данных (файлы) зоны по пути <strong>/var/named/</strong> с пустого примера и редактируем их</p>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">hq-srv$ cd /var/named
+<pre><code class="language-plaintext">hq-srv$ cd /var/named
 hq-srv$ cp named.empty hq.work
 hq-srv$ nano hq.work
 --- # Представлен полный файл
@@ -438,7 +441,7 @@ hq-srv$ ping br-r.branch.work
 <p>b. Используем Loopback как сервер. 127.0.0.1</p>
 <p>c. Все устройства должны синхронизировать время с HQ-R</p>
 <p>d. Все устройства должны иметь правильный часовой пояс (UTC +3), то есть <strong>Europe/Moscow</strong></p>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">HQ-R$ dnf install chrony # Вообще, он должен быть уже установлен
+<pre><code class="language-plaintext">HQ-R$ dnf install chrony # Вообще, он должен быть уже установлен
 HQ-R$ nano /etc/chrony.conf
 --- # Должны быть следующие строки. Некоторые можно раскомментировать
 # ВСЕ ПАРАМЕТРЫ "server" должны быть закомментированы!!! Кроме того, что ниже.
@@ -462,11 +465,11 @@ redos$ chronyc sources # На всех устройствах должен бы�
 "MS	NAME/IP STRATUM Poll Reach LastRx Last sample"
 "192.168.10.1	0	6	1	-	+0ns[	+0ns] +/-	0ns"
 </code></pre>
-<h5 class="toc-header" id="freeipa"> FreeIPA</h5>
+<h5>FreeIPA</h5>
 <p>Настройте сервер домена выбор, его типа обоснуйте, на базе hq-srv через web интерфейс, выбор технологий обоснуйте. <strong>Обоснование</strong>: Бесплатный, общеизвестный, так как много где используется, удобный за счёт веб-интерфейса, гибкий, так как позволяет опубликовать любую службу в домен. <strong>Нужно поднять контроллер домена</strong> на <strong>hq-srv</strong> и ввести две машины в домен.</p>
 <p>a. Ввести две машины в домен <strong>BR-SRV</strong> и <strong>CLI</strong></p>
 <p>b. Организуйте отслеживание подключения к домену</p>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">hq-srv$ dnf makecache
+<pre><code class="language-plaintext">hq-srv$ dnf makecache
 hq-srv$ systemctl disable --now systemd-timesyncd # Нужно отключить службу не chrony. Вообще, сервис по умолчанию должен не работать, но на всякий случай отключите
 hq-srv$ timedatectl set-timezone Europe/Moscow # Если ещё не установлена корректный часовой пояс, то установите
 # Перед установкой FreeIPA убедитесь в след. пунктах:
@@ -510,8 +513,8 @@ hq-srv$ ipa-server-install --mkhomedir # Должно быть установл�
 # В конце будет общая настройка, после "yes" идём выполнять другие пункты, пока выполняется установка (она не быстрая)
 # Setup complete - FreeIPA успешно установлен
 </code></pre>
-<figure class="image"><img alt="" src="FreeIPA-final.png"></figure>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">hq-srv$ kinit admin # Проверяем доступность домена, если успешно, то всё работает#
+<figure class="image"><img src="FreeIPA-final.png" alt=""></figure>
+<pre><code class="language-plaintext">hq-srv$ kinit admin # Проверяем доступность домена, если успешно, то всё работает#
 # === ДЛЯ КЛИЕНТА ===
 # Клиентами, а точнее устройствами в домене выступают CLI и BR-SRV
 # Для CLI нужно создать соединение с HQ-SRV (На нём FreeIPA). Это можно сделать двумя способами:
@@ -561,7 +564,7 @@ cli$ ipa-client-install -d --mkhomedir --enable-dns-updates
 "Continue to configure the system with these values? [no]:"
 "User authorized to enroll computers: admin"
 </code></pre>
-<h5 class="toc-header" id="smb"> SMB</h5>
+<h5>SMB</h5>
 <p>Реализуйте файловый SMB или NFS (выбор обоснуйте) сервер на базе сервера HQ-SRV. Будем работать с SMB, так как там проше разграничить пользователей</p>
 <p>a. Общие папки:</p>
 <p>​ i. Branch_Files - для пользователя Branch admin</p>
@@ -601,5 +604,5 @@ cli$ ipa-client-install -d --mkhomedir --enable-dns-updates
 </figure>
 <p>Запустите сервис MediaWiki используя docker на сервере <strong>HQ-SRV</strong></p>
 <p>a. Установите Docker и Docker Compose</p>
-<pre v-pre="true" class="prismjs line-numbers"><code class="language-plaintext">hq-srv$ dnf install docker-compose
+<pre><code class="language-plaintext">hq-srv$ dnf install docker-compose
 </code></pre>
