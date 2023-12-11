@@ -2,7 +2,7 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-11T21:54:16.642Z
+date: 2023-12-11T21:54:47.443Z
 tags: 
 editor: markdown
 dateCreated: 2023-12-05T23:48:18.509Z
@@ -23,7 +23,7 @@ dateCreated: 2023-12-05T23:48:18.509Z
 3. Настоящее задание предполагает, что в стенд не имеет доступа к Интернету, тем не менее в данном решение Интернет подключён к устройству ISP для скачивание пакетов с общедоступного репозитория.
 4. Выбор операционной системы зависит от образовательной организации. В данном решении предполагается использования только [**RedOS 7.3.3 Minimal installation**](https://files.red-soft.ru/redos/7.3/x86_64/iso/redos-MUROM-7.3.3-20230815.0-Everything-x86_64-DVD1.iso) и [**RedOS 7.3.3 Workstation (MATE)**](https://files.red-soft.ru/redos/7.3/x86_64/iso/redos-MUROM-7.3.3-20230815.0-Everything-x86_64-DVD1.iso)
 ## Топология
-![demo24-topology.png](/demo24-topology.png)![demo24-topology.png](/demo24-topology.png)
+![demo24-topology.png](/demo24-topology.png)
 ## Предлагаемая таблица IP-адресов
 
 | Устройство | IP-адрес             | Сеть     |
