@@ -2,7 +2,7 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-11T22:42:26.165Z
+date: 2023-12-11T23:05:01.028Z
 tags: 
 editor: ckeditor
 dateCreated: 2023-12-05T23:48:18.509Z
@@ -34,7 +34,8 @@ dateCreated: 2023-12-05T23:48:18.509Z
     <thead>
       <tr>
         <th style="text-align:center;width:100px;">Устройство</th>
-        <th style="text-align:center;width:300px;">IP-адрес</th>
+        <th style="text-align:center;width:300px;">IPv4</th>
+        <th style="text-align:center;width:300px;">IPv6</th>
         <th style="text-align:center;width:100px;">Сеть</th>
       </tr>
     </thead>
@@ -42,52 +43,78 @@ dateCreated: 2023-12-05T23:48:18.509Z
       <tr>
         <td style="text-align:center;width:100px;" rowspan="4">ISP</td>
         <td style="width:300px;">192.168.106.X (DHCP)</td>
+        <td style="width:300px;">None</td>
         <td style="text-align:center;width:100px;">Internet</td>
       </tr>
       <tr>
         <td style="width:300px;">172.16.10.1/30</td>
+        <td style="width:300px;">2001:172:10::1/126</td>
         <td style="text-align:center;width:100px;">ISP-HQ</td>
       </tr>
       <tr>
         <td style="width:300px;">172.16.20.1/30</td>
+        <td style="width:300px;">2001:172:20::1/126</td>
         <td style="text-align:center;width:100px;">ISP-BR</td>
       </tr>
       <tr>
         <td style="width:300px;">192.168.111.1/24</td>
+        <td style="width:300px;">2001:111::1/120</td>
         <td style="text-align:center;width:100px;">ISP-CLI</td>
       </tr>
       <tr>
-        <td style="text-align:center;width:100px;" rowspan="2">HQ-R</td>
+        <td style="text-align:center;width:100px;" rowspan="3">HQ-R</td>
         <td style="width:300px;">172.16.10.2/30</td>
+        <td style="width:300px;">2001:172:10::2/126</td>
         <td style="text-align:center;width:100px;">ISP-HQ</td>
       </tr>
       <tr>
         <td style="width:300px;">192.168.10.1/26</td>
+        <td style="width:300px;">2001:192:10::1/122</td>
         <td style="text-align:center;width:100px;">HQ-NET</td>
       </tr>
       <tr>
-        <td style="text-align:center;width:100px;" rowspan="2">BR-R</td>
+        <td>10.0.0.1/29</td>
+        <td>2001:10::1/125</td>
+        <td style="text-align:center;">VPN</td>
+      </tr>
+      <tr>
+        <td style="text-align:center;width:100px;" rowspan="3">BR-R</td>
         <td style="width:300px;">172.16.20.2/30</td>
+        <td style="width:300px;">2001:172:20::2/126</td>
         <td style="text-align:center;width:100px;">ISP-BR</td>
       </tr>
       <tr>
         <td style="width:300px;">192.168.20.1/28</td>
+        <td style="width:300px;">2001:192:20::1/123</td>
         <td style="text-align:center;width:100px;">BR-NET</td>
+      </tr>
+      <tr>
+        <td>10.0.0.2/29</td>
+        <td>2001:10::2/125</td>
+        <td style="text-align:center;">VPN</td>
       </tr>
       <tr>
         <td style="text-align:center;width:100px;">HQ-SRV</td>
         <td style="width:300px;">192.168.10.5/26</td>
+        <td style="width:300px;">2001:192:10::5/122</td>
         <td style="text-align:center;width:100px;">HQ-NET</td>
       </tr>
       <tr>
         <td style="text-align:center;width:100px;">BR-SRV</td>
         <td style="width:300px;">192.168.20.5/28</td>
+        <td style="width:300px;">2001:192:20::5/123</td>
         <td style="text-align:center;width:100px;">BR-NET</td>
       </tr>
       <tr>
-        <td style="text-align:center;width:100px;">CLI</td>
+        <td style="text-align:center;width:100px;" rowspan="2">CLI</td>
         <td style="width:300px;">192.168.111.2/24</td>
+        <td style="width:300px;">2001:111::1/120</td>
         <td style="text-align:center;width:100px;">ISP-CLI</td>
+      </tr>
+      <tr>
+        <td>10.0.0.3/29</td>
+        <td>2001:10::3/125</td>
+        <td style="text-align:center;">VPN</td>
       </tr>
     </tbody>
   </table>
@@ -99,17 +126,19 @@ dateCreated: 2023-12-05T23:48:18.509Z
 </blockquote>
 <pre><code class="language-python">hostnamectl set-hostname [Имя] # Например: hostnamectl set-hostname ISP
 hostnamectl set-hostname [Имя.домен...] # Используйте в локальных сетях организации, таким образом, чтобы автоматически заполнить параметр 'search' поисковый домен   
+# Примеры:
 # HQ-SRV: hq-srv.hq.work
 # HQ-R: hq-r.hq.work
 # BR-SRV: br-srv.branch.work
 # BR-R: br-r.branch.work
 # CLI: cli
-# ISP: isp
-# выв
-# 111</code></pre>
-<p>b. Рассчитайте IP-адресацию IPv4 и IPv6. <i>см. Таблицу IP-адресов</i></p>
-<p>c. Пул адресов для BRANCH - не более 16 адресов. <strong>Это маска 28</strong></p>
-<p>d. Пул адресов для HQ - не более 64 адресов. <strong>Это маска 26</strong></p>
+# ISP: isp</code></pre>
+<p>&nbsp; &nbsp;b. Рассчитайте IP-адресацию IPv4 и IPv6. <i>см. Таблицу IP-адресов</i></p>
+<p>&nbsp; &nbsp;c. Пул адресов для BRANCH - не более 16 адресов. <strong>Это маска 28</strong></p>
+<p>&nbsp; &nbsp;d. Пул адресов для HQ - не более 64 адресов. <strong>Это маска 26</strong></p>
+<blockquote>
+  <p>Количество хостов для сети с маской подсети IPv4: /26 = 62, /28 = 30. IPv6: /123 = 62 /123 = 30</p>
+</blockquote>
 <p><strong>Продолжение следующих пунктов</strong> требует <i>базовой связанности</i> не указанной в задании. Убедитесь, что все машины выход в Интернет и на устройствах <strong>ISP, HQ-R, BR-R</strong> настроен <strong>NAT (PAT)</strong>.</p>
 <pre><code class="language-plaintext"># Настройка iptables на маршрутизаторах
 redos$ dnf install iptables-services
