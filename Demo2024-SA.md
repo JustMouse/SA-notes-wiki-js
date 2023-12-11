@@ -2,7 +2,7 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-11T20:30:30.329Z
+date: 2023-12-11T20:31:24.854Z
 tags: 
 editor: markdown
 dateCreated: 2023-12-05T23:48:18.509Z
@@ -12,7 +12,7 @@ dateCreated: 2023-12-05T23:48:18.509Z
 
 ## Ссылки
 ### Загрузка документа
-[PDF-файл](http://wiki.kptlo.ru:8080/Demo2024-SA/%D0%9E%D1%82%D0%B1%D0%BE%D1%80%D0%A0%D0%A7-%D0%9F%D1%80%D0%BE%D1%8424.pdf)
+[Документ в разный форматах](http://wiki.kptlo.ru:8080/Demo2024-SA)
 ## Предлагаемая таблица IP-адресов
 
 | Устройство | IP-адрес             | Сеть     |
