@@ -2,7 +2,7 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-12T00:24:19.253Z
+date: 2023-12-12T06:09:22.266Z
 tags: 
 editor: markdown
 dateCreated: 2023-12-05T23:48:18.509Z
@@ -126,7 +126,8 @@ redos$ nano /etc/sysctl.conf
 ```
 Дописываем строку в файл:
 ```bash
-net.ipv4.ip_forward=1
+net.ipv4.ip_forward=1 # IPv4
+net.ipv6.conf.all.forwarding=1 # IPv6
 ```
 Готово. Перечитаем конфиг-файл и введём изменения:
 ```bash
