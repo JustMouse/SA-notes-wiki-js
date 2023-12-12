@@ -2,7 +2,7 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-12T06:09:22.266Z
+date: 2023-12-12T06:11:46.734Z
 tags: 
 editor: markdown
 dateCreated: 2023-12-05T23:48:18.509Z
