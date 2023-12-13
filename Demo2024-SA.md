@@ -2,7 +2,7 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-13T01:40:57.329Z
+date: 2023-12-13T04:50:29.234Z
 tags: 
 editor: markdown
 dateCreated: 2023-12-05T23:48:18.509Z
@@ -17,12 +17,19 @@ dateCreated: 2023-12-05T23:48:18.509Z
 
 [Официальная документация 2023](https://bom.firpo.ru/Public/83)
 
-### Загрузка решения в виде документа
+### Загрузка решение в виде документа (Компактная версия)
 
 -   [PDF](http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.pdf)
 -   [Word](http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.word)
 -   [HTML](http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.html)
 -   [MD](http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-101.md)
+
+### Загрузка решения в виде документа (Версия сайта)
+
+-   [PDF](http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-wiki-101.pdf)
+-   [Word](http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-wiki-101.word)
+-   [HTML](http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-wiki-101.html)
+-   [MD](http://wiki.kptlo.ru:8080/Demo2024-SA/Demo24-wiki-101.md)
 
 ## Предисловие
 
@@ -146,6 +153,10 @@ redos$ sysctl -p
 # Настройка сетевых интерфейсов
 redos$ nmtui # Открывает псевдографика с настройками
 ```
+
+> Учтите, что для установки пакетов нужно установить публичный DNS-сервер, например `8.8.8.8`. При этом, настройка должна иметь временный характер, так как после установки FreeIPA все устройство в локальных сетях должны отправлять DNS-запросы в первую очередь к контроллеру домена
+{.is-warning}
+
 Далее добавляем IP-адрес, маску подсети, шлюз, DNS-сервера, как минимум будет IP-адрес контроллера домена, и Поисковый домен для автодополнение DNS-запросов:
 ```bash
 redos$ Изменить подключение > [Интерфейс] Изменить > [Поменяйте Имя профиля, Конфигурацию IPv4: Выберите между Автоматически и Вручную (DHCP и Static).
@@ -161,124 +172,169 @@ HQ-R:
 - DNS: `192.168.10.5`
 - Поисковый домен: `hq.work`
 
-### 2.  Настройте внутреннюю динамическую маршрутизацию по средствам **FRR**. Выберите и обоснуйте выбор протокола динамической маршрутизации из расчёта, что в дальнейшем сеть будет масштабироваться.
+### 2.  Настройте внутреннюю динамическую маршрутизацию по средствам **FRR**. Выберите и обоснуйте выбор протокола динамической маршрутизации из расчёта, что в дальнейшем сеть будет масштабироваться
 
 Это будет **OSPF** в VPN туннеле `HQ-R` и `BR-R`. Сначала должен быть настроен **туннель**.
 > Несмотря на то, что в здании не уточняется, использование `ISP` при выполнении этого пункта, тем не менее по-настоящему **внутренней** она будет при использование исключительно локальных сети, в том числе и туннеля
-### VPN
+
+Для настройки OSPF используется пакет `frr`, реализующий на устройстве динамическую маршрутизацию.
+Необходимо настроить OSPF-связанность через туннель. Для начало он должен быть. В данном случае самым простым по настройки будет `WireGuard`, использующий метод шифрования `ChaCha20`, обычную пару ключей
+Установим `WireGuard` и `frr` на устройствах `HQ-R`,`BR-R`:
 ```bash
-HQ-R$ dnf install wireguard-tools frr # Wireguard - VPN, FRR - OSPF
-HQ-R$ cd /etc/wireguard
-HQ-R$ wg genkey | tee HQ-R.key | wg pubkey > HQ-R.pub # .key - приватный ключ; .pub - публичный ключ
-HQ-R$ wg genkey | tee BR-R.key | wg pubkey > BR-R.pub # На HQ-R должен быть приватный HQ-R и публичный BR-R, а на BR-R наоборот
-HQ-R$ nano wg.conf
---- # Представлен весь файл
+hq-r$ dnf install wiregaurd-tools frr
+# Устанавливаем на BR-R и HQ-R
+```
+Далее, создадим пары ключей для устройств в папке конфигов `WireGuard` для удобного доступа
+> В дальнейшем устройство CLI такуже будет подключено к VPN. Поэтому, чтобы не тратить время преднастроем сервер-VPN заранее
+```bash
+hq-r$ cd /etc/wireguard
+hq-r$ wg genkey | tee HQ-R.key | wg pubkey > HQ-R.pub # .key - приватный ключ; .pub - публичный ключ
+hq-r$ wg genkey | tee BR-R.key | wg pubkey > BR-R.pub # На HQ-R должен быть приватный HQ-R и публичный BR-R, а на BR-R наоборот
+hq-r$ wg genkey | tee CLI.key | wg pubkey > CLI.pub # Клиент
+```
+Создаём и настраиваем туннель в файле `/etc/wireguard/wg.conf`:
+```bash
+hq-r$ nano /etc/wireguard/wg.conf
+```
+```bash
 [Interface]
 PrivateKey = ? # Вместо '?' вставляем приватный ключ HQ-R
-Address = 10.0.0.1/29
+Address = 10.0.0.1/29, 2001:10::1/125
 ListenPort = 51820
-Table = off
+Table = off # Отключаем статическую маршрутизацию для работы OSPF
+
+# BR-R
 [Peer]
 PublicKey = ? # Вместо '?' вставляем публичный ключ BR-R
-AllowedIPs = 10.0.0.2/32, 192.168.20.0/28, 0.0.0.0/0
----
-HQ-R$ cat HQ-R.key >> wg.conf # Вставляем в файл ДЛИННУЮ строку-ключ с помощью '>>'. После вырезаем строку Ctrl+K и вставляем Ctrl+U
-HQ-R$ cat BR-R.pub >> wg.conf
+AllowedIPs = 10.0.0.2/32, 192.168.20.0/28, 2001:192:20::/123
+PersistentKeepAlive = 5 # Поддержка туннеля
+
+# CLI
+[Peer]
+PublicKey = ? # Вместо '?' вставляем публичный ключ CLI
+AllowedIPs = 10.0.0.2/32, 192.168.111.0/24
+PersistentKeepAlive = 5 # Поддержка туннеля
+```
+Импортируем ключи и расставляем по нужным местам. Используем `nano`, поэтому удобно вырезать <kbd>CTRL</kbd>+<kbd>K</kbd> и вставить <kbd>CTRL</kbd>+<kbd>U</kbd>:
+```bash
+hq-r$ cat HQ-R.key >> wg.conf # Вставляем в файл ДЛИННУЮ строку-ключ с помощью дозаписи '>>'. 
+hq-r$ cat BR-R.pub >> wg.conf
+hq-r$ cat CLI.pub >> wg.conf
+```
+Включаем интерфейс и включаем автозагрузку:
+```bash
 HQ-R$ wg-quick up wg
 HQ-R$ systemctl enable wg-quick@wg
-HQ-R$ nano /etc/ssh/sshd_config
----
+```
+Приготовимся к переносу ключей через `scp`:
+```bash
+hq-r$ nano /etc/ssh/sshd_config
+```
+```bash
 PermitRootLogin yes;
----
-HQ-R$ systemctl restart sshd
-BR-R$ dnf install wireguard-tools frr
-BR-R$ scp root@172.16.10.2:/etc/wireguard/* /etc/wireguard/ # Переносим ключики
-BR-R$ nano /etc/wireguard/wg.conf # Заменяем ключи
---- # Представлен весь файл
+Port 2220;
+```
+```bash
+hq-r$ systemctl restart sshd
+```
+Перенесём ключи с HQ-R:
+```bash
+br-r$ scp root@172.16.10.2:/etc/wireguard/* /etc/wireguard/ # Переносим ключики
+br-r$ nano /etc/wireguard/wg.conf # Заменяем ключи
+```
+```bash
 [Interface]
 PrivateKey = ? # Вместо '?' вставляем приватный ключ BR-R
-Address = 10.0.0.2/29
+Address = 10.0.0.2/29, 2001:10::2/125
 Table = off
 [Peer]
 PublicKey = ? # Вместо '?' вставляем публичный ключ HQ-R
 Endpoint = 172.16.10.2:51820
-AllowedIPs = 10.0.0.1/32, 192.168.10.0/26, 0.0.0.0/0
----
-BR-R$ cat HQ-R.pub >> wg.conf # Вставляем в файл ДЛИННУЮ строку-ключ с помощью '>>'. После вырезаем строку Ctrl+K и вставляем Ctrl+U
-BR-R$ cat BR-R.key >> wg.conf
-BR-R$ nano /etc/ssh/sshd_config
----
+AllowedIPs = 10.0.0.1/32, 192.168.10.0/26, 2001:192:10::/122
+PersistentKeepAlive = 5 # Поддержка туннеля
+```
+```bash
+br-r$ cat HQ-R.pub >> wg.conf # Вставляем в файл ДЛИННУЮ строку-ключ с помощью '>>'.
+br-r$ cat BR-R.key >> wg.conf
+```
+```bash
 BR-R$ wg-quick up wg
 BR-R$ systemctl enable wg-quick@wg
-#===ПРОВЕРКА===#
-HQ-R$ wg show
-BR-R$ wg show
-HQ-R$ ping 10.0.0.2
-HQ-R$ ping 192.168.20.1
-BR-R$ ping 10.0.0.1
-BR-R$ ping 192.168.10.1
 ```
-
-### OSPF (FRR)
-
-```plaintext
-#===HQ-R===#
-HQ-R$ apt install frr
-HQ-R$ nano /etc/frr/daemons
+Проверить работу туннеля можно так:
+```bash
+hq-r$ wg show
+br-r$ wg show
+hq-r$ ping 10.0.0.2
+hq-r$ ping 2001:10::2
+br-r$ ping 10.0.0.1
+hq-r$ ping 2001:10::1
+```
+Настреваем `frr` и `OSPF` в частности:
+```bash
+hq-r$ nano /etc/frr/daemons
+```
+```bash
+ospfd=yes
+```
+```bash
+hq-r$ systemctl restart frr
+hq-r$ vtysh
+hq-r$ $ conf t
+hq-r$ (conf)$ ip forwarding
+hq-r$ (conf)$ router ospf
+hq-r$ (conf-router)$ network 192.168.10.0/26 area 0
+hq-r$ (conf-router)$ network 10.0.0.0/29 area 0
+hq-r$ (conf-router)$ neighbor 10.0.0.2
+hq-r$ (conf-router)$ exit
+hq-r$ (conf)$ interface wg
+hq-r$ (conf-if)$ ip ospf network broadcast
+hq-r$ (conf-if)$ end
+hq-r$ $ wr
+hq-r$ $ exit
+```
+```bash
+hq-r$ systemctl enable frr
+hq-r$ systemctl restart frr
+#===br-r===#
+br-r$ apt install frr
+br-r$ nano /etc/frr/daemons
 --- # В файле поменять следующую строку
 ospfd=yes
 ---
-HQ-R$ systemctl restart frr
-HQ-R$ vtysh
-HQ-R$ $ conf t
-HQ-R$ (conf)$ ip forwarding
-HQ-R$ (conf)$ router ospf
-HQ-R$ (conf-router)$ network 192.168.10.0/26 area 0
-HQ-R$ (conf-router)$ network 10.0.0.0/29 area 0
-HQ-R$ (conf-router)$ neighbor 10.0.0.2
-HQ-R$ (conf-router)$ exit
-HQ-R$ (conf)$ interface wg
-HQ-R$ (conf-if)$ ip ospf network broadcast
-HQ-R$ (conf-if)$ end
-HQ-R$ $ wr
-HQ-R$ $ exit
-HQ-R$ systemctl enable frr
-HQ-R$ systemctl restart frr
-#===BR-R===#
-BR-R$ apt install frr
-BR-R$ nano /etc/frr/daemons
---- # В файле поменять следующую строку
-ospfd=yes
----
-BR-R$ systemctl restart frr
-BR-R$ vtysh
-BR-R$ $ conf t
-BR-R$ (conf)$ ip forwarding
-BR-R$ (conf)$ router ospf
-BR-R$ (conf-router)$ network 192.168.20.0/28 area 0
-BR-R$ (conf-router)$ network 10.0.0.0/29 area 0
-BR-R$ (conf-router)$ neighbor 10.0.0.1
-HQ-R$ (conf-router)$ exit
-HQ-R$ (conf)$ interface wg
-HQ-R$ (conf-if)$ ip ospf network broadcast
-HQ-R$ (conf-if)$ end
-BR-R$ $ wr
-BR-R$ $ exit
-BR-R$ systemctl enable frr
-BR-R$ systemctl restart frr
+br-r$ systemctl restart frr
+br-r$ vtysh
+```
+```bash
+br-r$ $ conf t
+br-r$ (conf)$ ip forwarding
+br-r$ (conf)$ router ospf
+br-r$ (conf-router)$ network 192.168.20.0/28 area 0
+br-r$ (conf-router)$ network 10.0.0.0/29 area 0
+br-r$ (conf-router)$ neighbor 10.0.0.1
+hq-r$ (conf-router)$ exit
+hq-r$ (conf)$ interface wg
+hq-r$ (conf-if)$ ip ospf network broadcast
+hq-r$ (conf-if)$ end
+br-r$ $ wr
+br-r$ $ exit
+```
+```bash
+br-r$ systemctl enable frr
+br-r$ systemctl restart frr
 #===ПРОВЕРКА===#
---- # Проверка с HQ-R
-HQ-R$ ip ro # Должен быть маршрут с ospf меткой до сети 192.168.20.0/28
-HQ-R$ vtysh
-HQ-R$ $ show ip ospf neighbor # Должен быть IP-адрес соседа, сам сосед с режимом(state) Full/Backup или Full/BR
-HQ-R$ $ show ip route # Должен быть маршрут с типом "O>*"
---- # Проверка с BR-R
-BR-R$ ip ro # Должен быть маршрут с ospf меткой до сети 192.168.10.0/26
-BR-R$ vtysh
-BR-R$ $ show ip ospf neighbor # Должен быть IP-адрес соседа, сам сосед с режимом(state) Full/Backup или Full/BR
-BR-R$ $ show ip route # Должен быть маршрут с типом "O>*"
+--- # Проверка с hq-r
+hq-r$ ip ro # Должен быть маршрут с ospf меткой до сети 192.168.20.0/28
+hq-r$ vtysh
+hq-r$ $ show ip ospf neighbor # Должен быть IP-адрес соседа, сам сосед с режимом(state) Full/Backup или Full/BR
+hq-r$ $ show ip route # Должен быть маршрут с типом "O>*"
+--- # Проверка с br-r
+br-r$ ip ro # Должен быть маршрут с ospf меткой до сети 192.168.10.0/26
+br-r$ vtysh
+br-r$ $ show ip ospf neighbor # Должен быть IP-адрес соседа, сам сосед с режимом(state) Full/Backup или Full/BR
+br-r$ $ show ip route # Должен быть маршрут с типом "O>*"
 --- # Проверка с WEB-L с учётом работающего туннеля
-hq-srv$ ping 192.168.20.5 # Хорошая проверка. Она проверяет сразу sysctl, iptables, frr. Если что-то не работает проверьте ping на более близкой дистанции. С HQ-R на BR-SRV или BR-R на BR-SRV
+hq-srv$ ping 192.168.20.5 # Хорошая проверка. Она проверяет сразу sysctl, iptables, frr. Если что-то не работает проверьте ping на более близкой дистанции. С hq-r на BR-SRV или br-r на BR-SRV
 ```
 
 ### DHCP
@@ -335,8 +391,6 @@ HQ-R$ iperf3 -c 172.16.10.1 # Включаем iperf3 в роли клиента
 # Заскриньте 5 строк со скоростью сети с помощью прикладных программа на компьютере или с помощью OpenNebula
 ```
 
-![](Demo24-screen1.png)
-
 1.  Составьте backup скрипты для сохранения конфигурации сетевых устройств, а именно **HQ-R** и **BR-R**. Продемонстрируйте их работу. **Данный пункт можно** выполнить только после выполнение пункта с **VPN и FRR** \[2\]
 
 ### SSH 2222
@@ -366,95 +420,7 @@ HQ-R$ iptables-save > /etc/sysconfig/iptables # Не забудьте сохра
 
 ## Модуль 2. Организация сетевого администрирования
 
-### BIND (ОПЦИОНАЛЬНО!!!)
-
 1.  Настройте **DNS-сервер** на сервере **hq-srv**. Нужно создать две прямых зоны с A записями и две обратные зоны с PTR записям. Прямые **"hq.work" и "branch.work"**. Обратные **"10.168.192.in-addr.arpa" и "20.168.192.in-addr.arpa"**
-
-```plaintext
-hq-srv$ dnf install bind
-hq-srv$ nano /etc/named.conf
---- # Следующие строки должны быть, некоторые нужно изменить, некоторые добавить
-listen-on port 53 { any; };
-allow-query { any; };
-dnssec-validation no;
-zone "hq.work" IN {
-    type master;
-    file "hq.work";
-}
-zone "branch.work" IN {
-    type master;
-    file "branch.work";
-}
-zone "10.168.192.in-addr.arpa" IN { # Обратные зоны будут записаны внутрь базы данных зоны с помощью оператора $ORIGIN
-    type master;
-    file "hq.work"; # Указываем на ту же базу данных зоны, в ней также будет храниться обратная
-}
-zone "20.168.192.in-addr.arpa" IN {
-    type master;
-    file "branch.work";
-}
-```
-
-Далее копируем базу данных (файлы) зоны по пути **/var/named/** с пустого примера и редактируем их
-
-```plaintext
-hq-srv$ cd /var/named
-hq-srv$ cp named.empty hq.work
-hq-srv$ nano hq.work
---- # Представлен полный файл
-# Пользуйте горячими клавишами: ALT+R - замена. F6 - поиск
-$TTL 3H
-@	IN	SOA	hq.work	root.hq.work.	(
-                                    1		; serial
-                                    1D		; refresh
-                                    1H		; retry
-                                    1W		; expire
-                                    3H )	; minimum
-@		NS	hq.work.
-@		A	192.168.10.5
-hq-r	A	192.168.10.1
-hq-srv	A	192.168.10.5
-
-$ORIGIN 10.168.192.in-addr.arpa
-5		PTR	hq-srv.hq.work.
-1		PTR	hq-r.hq.work.
----
-hq-srv$ cp hq.work branch.work
-hq-srv$ nano branch.work
---- # Представлен полный файл
-$TTL 3H
-@	IN	SOA	branch.work	root.branch.work.	(
-                                    1		; serial
-                                    1D		; refresh
-                                    1H		; retry
-                                    1W		; expire
-                                    3H )	; minimum
-@		NS	branch.work.
-@		A	192.168.10.5
-br-r	A	192.168.20.1
-br-srv	A	192.168.20.5
-
-$ORIGIN 20.168.192.in-addr.arpa
-5		PTR	br-srv.branch.work.
-1		PTR	br-r.branch.work.
----
-hq-srv$ systemctl restart named
-#===ПРОВЕРКА===#
-hq-srv$ named-checkconz -z # Проверяем загружены ли зоны. Должны быть следующие строки:
-"zone hq.work/IN: loaded serial 1"
-"zone 10.168.192.in-addr.arpa/IN: loaded serial 1"
-"zone branch.work/IN: loaded serial 1"
-"zone 20.168.192.in-addr.arpa/IN: loaded serial 1"
-hq-srv$ journalctl -e # Если что смотрим журнал на наличие ошибок
-hq-srv$ cat /etc/resolv.conf # Сервер получает параметры DNS с DHCP на HQ-R. Убедитесь, что у вас ПЕРВЫЙ параметр это:
-"nameserver 192.168.10.5" # То есть Ваш hq-srv
-hq-srv$ ping hq-r.hq.work
-hq-srv$ ping br-r.branch.work
-HQ-R$ cat /etc/resolv.conf # В "nmtui" установите DNS-сервер 192.168.10.5, а уже потом 8.8.8.8. В файле должен быть параметр:
-"nameserver 192.168.10.5"
-hq-srv$ ping hq-r.hq.work
-hq-srv$ ping br-r.branch.work
-```
 
 Настройте синхронизацию времени между сетевыми устройствами по протоколу NTP. Будем использовать как сервер пакет **chrony**.
 
