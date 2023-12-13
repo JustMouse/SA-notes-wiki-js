@@ -2,7 +2,7 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-13T07:13:52.600Z
+date: 2023-12-13T07:16:36.109Z
 tags: 
 editor: markdown
 dateCreated: 2023-12-05T23:48:18.509Z
@@ -297,7 +297,7 @@ hq-r$ $ exit
 hq-r$ systemctl enable frr
 hq-r$ systemctl restart frr
 #===br-r===#
-br-r$ apt install frr
+br-r$ dnf install frr
 br-r$ nano /etc/frr/daemons
 --- # В файле поменять следующую строку
 ospfd=yes
