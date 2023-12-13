@@ -2,7 +2,7 @@
 title: ДемоЭкзамен 2024 (СиСА-Профиль)
 description: 
 published: true
-date: 2023-12-13T07:16:36.109Z
+date: 2023-12-13T09:22:17.402Z
 tags: 
 editor: markdown
 dateCreated: 2023-12-05T23:48:18.509Z
@@ -539,7 +539,7 @@ cli$ cd /etc/wiregaurd
 cli$ nano /etc/wg.conf
 --- # Представлен весь файл
 [Interface]
-PrivateKey = ? # Вместо '?' вставляем приватный ключ BR-R
+PrivateKey = ? # Вместо '?' вставляем приватный ключ CLI
 Address = 10.0.0.3/29
 Table = off
 DNS = 192.168.10.5
